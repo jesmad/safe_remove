@@ -1,4 +1,4 @@
-## safe_remove_script ##
+## safe_remove ##
 Project that contains a number of Bash scripts that perform a safe-removal of files by moving them to a directory. This temporary directory will act as a recycling bin.
 
 ## durm ##
