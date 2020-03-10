@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [[ "$#" -eq 0 ]]; then 							#Checks if the command was ran with at least one argument
+	echo "srm: Missing operand(s)"
+	exit 1
+fi
+
+mkdir -p ~/saferm_trashDir                          #Creates a directory (in your home directory) for safe-remove if it doesn't exist already
+
+optionsFlag=0										#This will tell me if one of the arguments is an option
+for arg in "$@" 
+do 
+	if [[ $arg =~ ^- && ! -e $arg ]]; then						#Checks if one of the arguments is an option by checking if it starts with '-'
+		optionsFlag=1								#Found an option so change the optionsFlag
+	fi	
+done
+
+if [ $optionsFlag -eq 1 ]; then						#If at least one of the arguments is an option, then simply execute the /bin/rm command for earch argument
+	for arg in "$@"
+	do 
+		if [[ -e $arg && -f $arg ]]; then 			#Checks if the file exists and checks if it is a regular file. If it is a file, remove it.
+			rm "$arg"
+		elif [[ -e $arg && -d $arg ]]; then 		#Checks if the file exists and checks if it is a directory. If it is a directory, remove it.
+			rm -r "$arg"
+		elif [[ $arg =~ ^- && ! -e $arg ]]; then 
+			:
+		else
+			echo "srm: cannot remove '$arg': No such file or directory" 	#File does not exist
+		fi
+	done	
+else
+   for arg in "$@"									#If no options were passed in, then simply safe-remove each file
+   do				
+	  	if [[ -e $arg  && "$arg" != "saferm_trashDir" ]]; then 						#Checks if the argument is a file that exists and it is not the safe-rm directory
+			mv "$arg" ~/saferm_trashDir				#Move the file or directory to the safe-rm directory, which is the directory where all the unwanted files will end up
+		else
+			echo "srm: cannot remove '$arg': No such file or directory"	#File does not exist
+		fi
+
+	done
+fi
+

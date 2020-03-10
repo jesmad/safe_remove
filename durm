@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ "$#" -ne 0 ]]; then							#Checks whether the command durm was ran with arguments 
+	echo "durm: does not take any operands"
+	exit 1
+fi
+
+if [[ ! -e ~/saferm_trashDir ]]; then				#Checks to see if the safe-rm-trash directory exists 
+	echo "durm: safe-rm-trash directory (a.k.a. 'saferm_trashDir') does not exist because srm has not been executed successfully"
+	exit 1
+else												#Get disk usage, -a 'all types', -h 'human-readable', -c 'grand total'
+	echo "Total disk usage of the safe-rm-trash directory and its files is ==> `du -ahc ~/saferm_trashDir | grep "total" | awk '{printf "%s\n", $1}'`"
+fi

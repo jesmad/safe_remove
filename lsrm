@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [[ "$#" -ne 0 ]]; then												#If the command lsrm is ran with at least one argument, print an error message and terminate
+	echo "lsrm: cannot take any operands"
+	exit 1
+fi
+
+if [[ ! -e ~/saferm_trashDir ]]; then 									#Checks whether the safe-trash directory ('saferm_trashDir') exists
+	echo "lsrm: safe-rm-trash directory (a.k.a. 'saferm_trashDir') does not exist because srm has not been executed successfully"
+	exit 1
+fi
+
+numberFiles=$(ls ~/saferm_trashDir | wc -w)
+
+if [[ "$numberFiles" -eq 0 ]]; then
+	echo "lsrm: safe-rm-trash directory is empty"
+	exit 1
+else
+	ls -l ~/saferm_trashDir												#If the directory exists, run ls -l on it 
+fi
+
+

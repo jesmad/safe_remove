@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [[ "$#" -eq 0 ]]; then										#Checks if the unrm command was ran with at least one argument
+	echo "unrm: Missing operand(s)"
+	exit 1
+elif [[ -e ~/saferm_trashDir ]]; then 							#Checks whether the safe-rm directory exists
+	numberOfFiles=$(ls ~/saferm_trashDir | wc -w)				#Counts the number of files in the safe-rm directory 
+	if [[ "$numberOfFiles" -eq 0 ]]; then
+		echo "unrm: safe-rm-trash directory (a.k.a. 'saferm_trashDir') is empty." 
+		exit 1
+	fi
+
+	for arg in "$@"												
+	do 
+		if [[ -e ~/saferm_trashDir/"$arg" ]]; then				#If the file exists in the safe-rm directory, move it to our current directory
+			mv ~/saferm_trashDir/"$arg" `pwd`
+		elif [[ $arg =~ ^- ]]; then
+			continue
+		else
+			echo "unrm: cannot remove '$arg': No such file or directory."	#File does not exist in the safe-rm directory
+		fi
+	done
+
+else															#The safe-rm directory does not exist
+	echo "unrm: safe-rm-trash directory (a.k.a. 'saferm_trashDir') does not exist because srm has not been executed successfully."
+	exit 1
+fi

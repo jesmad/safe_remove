@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [[ ! -e ~/saferm_trashDir ]]; then				#Checks whther the safe-rm-trash directory exists or not
+	echo "trash: safe-rm-trash directory (a.k.a. 'saferm_trashDir') does not exist because srm has not been executed successfully"
+	exit 1
+fi
+
+numberFiles=$(ls ~/saferm_trashDir | wc -w)			#Counts the number of safe-rm'd files 
+if [[ "$#" -ne 0 ]]; then 							#Checks that the trash command was called without any arguments
+	echo "trash: cannot take any operands"
+	exit 1
+elif [[ "$numberFiles" -eq 0 ]]; then				#Checks whether the safe-rm'd directory is empty already
+	echo "trash: directory is already empty"
+	exit 1
+else
+	for filename in ~/saferm_trashDir/*				#Remove every safe-rm'd file from the safe-rm-trash directory
+	do
+		if [[ -d "$filename" ]]; then 
+			rm -r "$filename"
+		elif [[ -f "$filename" ]]; then
+			rm "$filename"
+		fi
+	done
+fi
